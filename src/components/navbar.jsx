@@ -25,7 +25,9 @@ const Navbar = () => {
 
   return (
     <div className="p-4 flex items-center justify-between bg-amber-100 border-b border-amber-200 shadow-sm">
-      <div className="text-2xl font-bold text-amber-800">Car Rentals</div>
+      <div className="text-2xl font-bold text-amber-800">
+        <Link to={"/"}>Car Rentals</Link>
+      </div>
 
       <div className="flex gap-6 items-center">
         <Link
