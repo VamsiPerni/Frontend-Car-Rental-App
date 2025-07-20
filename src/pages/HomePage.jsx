@@ -2,10 +2,12 @@ import { CategoriesList } from "../components/categoriesList";
 import { Footer } from "../components/footer";
 import { Navbar } from "../components/navbar";
 
-const HomePage = () => {
+const HomePage = (props) => {
+  const { text, handleSearchText } = props;
+
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar />
+      <Navbar text={text} handleSearchText={handleSearchText} />
       <main>
         <div>
           <CategoriesList />

@@ -7,11 +7,19 @@ import { LoginPage } from "./pages/LoginPage";
 import { HomePage } from "./pages/HomePage";
 import { NotFoundPage } from "./pages/NotFoundPage";
 import { ProfilePage } from "./pages/ProfilePage";
+import { SearchPage } from "./pages/SearchPage";
+import { useState } from "react";
 
 const App = () => {
   const { appLoading, user } = useAppContext();
-
   const { isAuthenticated } = user;
+
+  const [text, setText] = useState("");
+
+  const handleSearchText = (newVal) => {
+    setText(newVal);
+  };
+
   console.log("🟡 : App : isAuthenticated:", isAuthenticated);
   console.log("🟡 : App : isAuthenticated: final", !isAuthenticated);
 
@@ -43,10 +51,19 @@ const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<HomePage />} />
+        <Route
+          path="/"
+          element={<HomePage text={text} handleSearchText={handleSearchText} />}
+        />
         <Route path="/signup" element={<HomePage />} />
         <Route path="/login" element={<HomePage />} />
         <Route path="/profile" element={<ProfilePage />} />
+        <Route
+          path="/search"
+          element={
+            <SearchPage text={text} handleSearchText={handleSearchText} />
+          }
+        />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
