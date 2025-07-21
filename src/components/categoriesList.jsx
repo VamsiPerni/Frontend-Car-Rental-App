@@ -14,7 +14,6 @@ const CategoriesList = () => {
       );
 
       const result = await response.json();
-      //   console.log("Result ---->> ", result);
       setProducts(result.data.products);
     } catch (err) {
       console.log("Error while getting products", err.message);

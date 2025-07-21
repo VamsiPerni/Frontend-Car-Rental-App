@@ -1,9 +1,18 @@
+import { useLocation } from "react-router";
 import { CategoriesList } from "../components/categoriesList";
 import { Footer } from "../components/footer";
 import { Navbar } from "../components/navbar";
+import { useEffect } from "react";
 
 const HomePage = (props) => {
-  const { text, handleSearchText } = props;
+  const { text, setText, handleSearchText } = props;
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.pathname === "/") {
+      setText("");
+    }
+  }, [location]);
 
   return (
     <div className="min-h-screen flex flex-col">

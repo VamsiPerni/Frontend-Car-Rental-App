@@ -53,7 +53,13 @@ const App = () => {
       <Routes>
         <Route
           path="/"
-          element={<HomePage text={text} handleSearchText={handleSearchText} />}
+          element={
+            <HomePage
+              text={text}
+              setText={setText}
+              handleSearchText={handleSearchText}
+            />
+          }
         />
         <Route path="/signup" element={<HomePage />} />
         <Route path="/login" element={<HomePage />} />
