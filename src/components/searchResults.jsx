@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 import { ProductResultCard } from "./productResultCard";
 const LIMIT = 10;
 
@@ -8,6 +9,7 @@ const SearchResults = (props) => {
   // eslint-disable-next-line no-unused-vars
   const [totalPages, setTotalPages] = useState(1);
   const { searchQuery } = props;
+  const navigate = useNavigate();
 
   const getSearchResults = async () => {
     try {
@@ -60,6 +62,42 @@ const SearchResults = (props) => {
     setPage(1);
   }, [searchQuery]);
 
+  const [compareList, setCompareList] = useState(() => {
+    const stored = localStorage.getItem("compareList");
+    return stored ? JSON.parse(stored) : [];
+  });
+
+  const addToCompare = (item) => {
+    if (compareList.length >= 3) return;
+    const exists = compareList.some((i) => i._id === item._id);
+    if (!exists) {
+      const updated = [...compareList, item];
+      setCompareList(updated);
+      localStorage.setItem("compareList", JSON.stringify(updated));
+    }
+  };
+
+  const removeFromCompare = (id) => {
+    const updated = compareList.filter((item) => item._id !== id);
+    setCompareList(updated);
+    localStorage.setItem("compareList", JSON.stringify(updated));
+  };
+
+  const clearCompare = () => {
+    setCompareList([]);
+    localStorage.removeItem("compareList");
+  };
+
+  const handleCompare = () => {
+    navigate(
+      `/compare?cars=${compareList
+        .map((elem) => {
+          return elem.title;
+        })
+        .join(",")}`
+    );
+  };
+
   return (
     <div>
       <h2>{searchQuery}</h2>
@@ -69,7 +107,7 @@ const SearchResults = (props) => {
             <div key={elem._id}>
               <ProductResultCard
                 key={elem._id}
-                id={elem._id}
+                _id={elem._id}
                 title={elem.title}
                 brand={elem.brand}
                 model={elem.model}
@@ -86,6 +124,14 @@ const SearchResults = (props) => {
                 location={elem.location}
                 mileage={elem.mileage}
                 registrationNumber={elem.registrationNumber}
+                {...elem}
+                compareList={compareList}
+                addToCompare={addToCompare}
+                removeFromCompare={removeFromCompare}
+                disableAdd={
+                  compareList.length >= 3 &&
+                  !compareList.some((i) => i._id === elem._id)
+                }
               />
             </div>
           );
@@ -112,6 +158,41 @@ const SearchResults = (props) => {
           Next
         </button>
       </div>
+      {compareList.length > 0 && (
+        <div className="fixed bottom-0 left-0 right-0 bg-white shadow-md border-t z-50 p-4 flex justify-between items-center">
+          <div className="flex flex-wrap gap-2">
+            {compareList.map((item) => (
+              <span
+                key={item._id}
+                className="text-sm text-gray-700 bg-gray-200 px-2 py-1 rounded"
+              >
+                {item.title}
+              </span>
+            ))}
+          </div>
+          <div className="flex gap-2">
+            <button
+              className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+              onClick={clearCompare}
+            >
+              Clear
+            </button>
+            <button
+              className={`px-3 py-1 rounded transition duration-200 
+    ${
+      compareList.length < 2
+        ? "bg-gray-400 text-white cursor-not-allowed"
+        : "bg-blue-600 text-white hover:bg-blue-700"
+    }
+  `}
+              onClick={handleCompare}
+              disabled={compareList.length < 2}
+            >
+              Compare
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

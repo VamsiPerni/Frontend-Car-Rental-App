@@ -2,11 +2,13 @@ import { Link, useNavigate } from "react-router";
 import { useAppContext } from "../contexts/appContext";
 import { axiosInstance } from "../axios/axiosInstance";
 import { ErrorToast, SuccessToast } from "../utils/toastHelper";
+import { useState } from "react";
 
 const Navbar = (props) => {
   const { user = {} } = useAppContext();
   const navigate = useNavigate();
   const { text, handleSearchText } = props;
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const { isAuthenticated } = user;
 
@@ -97,17 +99,51 @@ const Navbar = (props) => {
           </div>
         ) : (
           <div className="flex gap-4 items-center">
-            <button
-              onClick={handleLogout}
-              className="px-4 py-2 rounded-md text-white hover:bg-amber-700 transition-colors duration-200 font-medium"
-            >
-              Logout
-            </button>
-            <div
-              onClick={handleOpenProfilePage}
-              className="h-10 w-10 rounded-full bg-white text-amber-600 flex items-center justify-center cursor-pointer hover:bg-amber-100 transition-colors duration-200 font-bold shadow-sm"
-            >
-              {user?.email?.substr(0, 1)?.toUpperCase()}
+            <div className="relative">
+              <div
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                className="h-10 w-10 rounded-full bg-white text-amber-600 flex items-center justify-center cursor-pointer hover:bg-amber-100 transition-colors duration-200 font-bold shadow-sm"
+              >
+                {user?.email?.substr(0, 1)?.toUpperCase()}
+              </div>
+
+              {isDropdownOpen && (
+                <div className="absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded shadow-lg z-50">
+                  <ul className="py-1 text-sm text-gray-700">
+                    <li
+                      onClick={handleOpenProfilePage}
+                      className="px-4 py-2 hover:bg-amber-100 cursor-pointer"
+                    >
+                      Profile
+                    </li>
+                    <li
+                      onClick={() => {
+                        setIsDropdownOpen(false);
+                      }}
+                      className="px-4 py-2 hover:bg-amber-100 cursor-pointer"
+                    >
+                      My Bookings
+                    </li>
+                    <li
+                      onClick={() => {
+                        setIsDropdownOpen(false);
+                      }}
+                      className="px-4 py-2 hover:bg-amber-100 cursor-pointer"
+                    >
+                      Settings
+                    </li>
+                    <li
+                      onClick={() => {
+                        handleLogout();
+                        setIsDropdownOpen(false);
+                      }}
+                      className="px-4 py-2 hover:bg-amber-100 cursor-pointer text-red-500"
+                    >
+                      Logout
+                    </li>
+                  </ul>
+                </div>
+              )}
             </div>
           </div>
         )}

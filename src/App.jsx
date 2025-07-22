@@ -9,6 +9,7 @@ import { NotFoundPage } from "./pages/NotFoundPage";
 import { ProfilePage } from "./pages/ProfilePage";
 import { SearchPage } from "./pages/SearchPage";
 import { useState } from "react";
+import { ComparePage } from "./pages/ComparePage";
 
 const App = () => {
   const { appLoading, user } = useAppContext();
@@ -70,6 +71,7 @@ const App = () => {
             <SearchPage text={text} handleSearchText={handleSearchText} />
           }
         />
+        <Route path="/compare" element={<ComparePage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
