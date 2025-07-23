@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 
 const CategoriesList = () => {
   const [products, setProducts] = useState([]);
+  const navigate = useNavigate();
 
   const getData = async () => {
     try {
@@ -42,6 +44,10 @@ const CategoriesList = () => {
           <div
             key={elem._id}
             className="flex flex-col items-center justify-center p-4 bg-gray-50 rounded-xl hover:bg-white hover:shadow-md transition-all duration-300"
+            onClick={() =>
+              navigate(`/search?text=${encodeURIComponent(elem.brand)}`)
+            }
+            title={`Browse all ${elem.brand} cars`}
           >
             <div className="h-12 w-12 bg-amber-100 rounded-full flex items-center justify-center mb-2 text-amber-800 font-bold">
               {elem.brand.charAt(0)}

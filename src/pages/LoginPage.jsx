@@ -2,13 +2,16 @@ import { useState } from "react";
 import { Link } from "react-router";
 import { axiosInstance } from "../axios/axiosInstance";
 import { ErrorToast, SuccessToast } from "../utils/toastHelper";
+import { HashLoader } from "react-spinners";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleRegister = async () => {
     try {
+      setLoading(true);
       if (!email || !password) {
         ErrorToast("Email & password are required!");
         return;
@@ -31,8 +34,21 @@ const LoginPage = () => {
       ErrorToast(
         `Cannot signup: ${err.response?.data?.message || err.message}`
       );
+    } finally {
+      setLoading(false);
     }
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-[100vh] flex flex-col items-center justify-center gap-10 content-center">
+        <HashLoader size={120} color="#10b981" speedMultiplier={1.2} />
+        <div className="border-1 border-lime-800 p-8 rounded-lg">
+          <p>Verifying User Credentials</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-50 to-emerald-50 flex items-center justify-center p-4">

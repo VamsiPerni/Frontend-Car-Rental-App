@@ -100,7 +100,6 @@ const SearchResults = (props) => {
 
   return (
     <div>
-      <h2>{searchQuery}</h2>
       <div>
         {results.map((elem) => {
           return (
