@@ -114,7 +114,7 @@ const SearchResults = (props) => {
 
   return (
     <div>
-      <div>
+      <div className="relative">
         {results.map((elem) => {
           return (
             <div key={elem._id}>
@@ -206,10 +206,9 @@ const SearchResults = (props) => {
           </div>
         </div>
       )}
-      {/* The below code is for  */}
       {selectedProduct && (
         <div
-          className="fixed right-0 top-0 h-full w-full sm:w-[40vw] bg-white shadow-2xl border-l z-50 overflow-y-auto transition-transform duration-300"
+          className="fixed top-0 right-0 h-screen w-full sm:w-[40vw] max-w-md bg-white shadow-2xl border-l z-40 overflow-y-auto rounded-l-2xl"
           style={{
             width: "100%",
             maxWidth: "480px",
@@ -228,7 +227,7 @@ const SearchResults = (props) => {
           <div className="px-6 py-4 space-y-2">
             <img
               src={selectedProduct.images}
-              className="rounded w-full mb-3"
+              className="w-full h-56 object-cover rounded-lg mb-3"
               alt={selectedProduct.title}
             />
             <p>

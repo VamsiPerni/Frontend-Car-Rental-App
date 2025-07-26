@@ -22,6 +22,7 @@ const ViewPage = () => {
       setProduct(data.data.product);
       setMainImage(data.data.product.images);
       setReviews(data.data.reviews || []);
+      // eslint-disable-next-line no-unused-vars
     } catch (error) {
       setProduct(null);
     } finally {
