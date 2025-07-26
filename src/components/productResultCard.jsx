@@ -16,6 +16,7 @@ const ProductResultCard = (props) => {
     addToCompare,
     removeFromCompare,
     disableAdd,
+    onCardClick,
   } = props;
 
   const handleViewProduct = () => {
@@ -36,7 +37,9 @@ const ProductResultCard = (props) => {
   return (
     <div
       className="flex flex-col sm:flex-row gap-4 p-4 w-full max-w-4xl bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer border border-gray-200 group"
-      onClick={handleViewProduct}
+      onClick={() => {
+        onCardClick && onCardClick();
+      }}
     >
       <div className="w-full sm:w-1/3 h-48 bg-gray-50 overflow-hidden rounded-xl">
         <img

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { ProductResultCard } from "./productResultCard";
+import { HashLoader } from "react-spinners";
 const LIMIT = 10;
 
 const SearchResults = (props) => {
@@ -10,9 +11,12 @@ const SearchResults = (props) => {
   const [totalPages, setTotalPages] = useState(1);
   const { searchQuery } = props;
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
   const getSearchResults = async () => {
     try {
+      setLoading(true);
       const response = await fetch(
         `${
           import.meta.env.VITE_BACKEND_URL
@@ -35,6 +39,8 @@ const SearchResults = (props) => {
       }
     } catch (err) {
       console.error("Error while fetching search results:", err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -98,6 +104,14 @@ const SearchResults = (props) => {
     );
   };
 
+  if (loading) {
+    return (
+      <div className="min-h-[100vh] flex flex-col items-center justify-center gap-10 content-center">
+        <HashLoader size={120} color="#10b981" speedMultiplier={1.2} />
+      </div>
+    );
+  }
+
   return (
     <div>
       <div>
@@ -122,7 +136,6 @@ const SearchResults = (props) => {
                 images={elem.images}
                 location={elem.location}
                 mileage={elem.mileage}
-                registrationNumber={elem.registrationNumber}
                 {...elem}
                 compareList={compareList}
                 addToCompare={addToCompare}
@@ -131,6 +144,7 @@ const SearchResults = (props) => {
                   compareList.length >= 3 &&
                   !compareList.some((i) => i._id === elem._id)
                 }
+                onCardClick={() => setSelectedProduct(elem)}
               />
             </div>
           );
@@ -189,6 +203,54 @@ const SearchResults = (props) => {
             >
               Compare
             </button>
+          </div>
+        </div>
+      )}
+      {/* The below code is for  */}
+      {selectedProduct && (
+        <div
+          className="fixed right-0 top-0 h-full w-full sm:w-[40vw] bg-white shadow-2xl border-l z-50 overflow-y-auto transition-transform duration-300"
+          style={{
+            width: "100%",
+            maxWidth: "480px",
+          }}
+        >
+          <div className="flex justify-between items-center px-6 py-4 border-b">
+            <h3 className="text-lg font-bold">{selectedProduct.title}</h3>
+            <button
+              className="text-2xl text-gray-400 hover:text-gray-700"
+              onClick={() => setSelectedProduct(null)}
+              aria-label="Close"
+            >
+              &times;
+            </button>
+          </div>
+          <div className="px-6 py-4 space-y-2">
+            <img
+              src={selectedProduct.images}
+              className="rounded w-full mb-3"
+              alt={selectedProduct.title}
+            />
+            <p>
+              <b>Brand:</b> {selectedProduct.brand}
+            </p>
+            <p>
+              <b>Type:</b> {selectedProduct.type}
+            </p>
+            <p>
+              <b>Location:</b> {selectedProduct.location}
+            </p>
+            <p>
+              <b>Rating:</b> ⭐ {selectedProduct.rating}
+            </p>
+            <p>
+              <b>Availability:</b>{" "}
+              {selectedProduct.availability ? "Available" : "Unavailable"}
+            </p>
+            <p>
+              <b>Price/Day:</b> ₹{selectedProduct.pricePerDay}
+            </p>
+            {/* Add more fields as needed */}
           </div>
         </div>
       )}

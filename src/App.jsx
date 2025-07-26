@@ -10,6 +10,7 @@ import { ProfilePage } from "./pages/ProfilePage";
 import { SearchPage } from "./pages/SearchPage";
 import { useState } from "react";
 import { ComparePage } from "./pages/ComparePage";
+import { ViewPage } from "./pages/ViewPage";
 
 const App = () => {
   const { appLoading, user } = useAppContext();
@@ -72,6 +73,7 @@ const App = () => {
           }
         />
         <Route path="/compare" element={<ComparePage />} />
+        <Route path="/:id/view" element={<ViewPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
