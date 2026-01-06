@@ -1,28 +1,24 @@
-import { useLocation } from "react-router";
+import { useLocation, useOutletContext } from "react-router";
 import { CategoriesList } from "../components/categoriesList";
-import { Footer } from "../components/footer";
-import { Navbar } from "../components/navbar";
 import { useEffect } from "react";
 
-const HomePage = (props) => {
-  const { text, setText, handleSearchText } = props;
+const HomePage = () => {
+  const { setText } = useOutletContext();
   const location = useLocation();
 
   useEffect(() => {
     if (location.pathname === "/") {
       setText("");
     }
-  }, [location]);
+  }, [location, setText]);
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar text={text} handleSearchText={handleSearchText} />
       <main>
         <div>
           <CategoriesList />
         </div>
       </main>
-      <Footer />
     </div>
   );
 };

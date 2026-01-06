@@ -1,6 +1,5 @@
 import { useNavigate, useParams } from "react-router";
 import { useEffect, useState } from "react";
-import { Navbar } from "../components/navbar";
 import { Footer } from "../components/footer";
 import { axiosInstance } from "../axios/axiosInstance";
 import { HashLoader } from "react-spinners";
@@ -52,8 +51,6 @@ const ViewPage = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
-      <Navbar />
-
       <div className="bg-white shadow-sm pl-4 sm:pl-6 py-4">
         <button
           onClick={() => navigate(-1)}

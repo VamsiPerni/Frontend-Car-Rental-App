@@ -1,11 +1,9 @@
 import { useEffect } from "react";
-import { useSearchParams } from "react-router";
-import { Navbar } from "../components/navbar";
+import { useOutletContext, useSearchParams } from "react-router";
 import { SearchResults } from "../components/searchResults";
-import { Footer } from "../components/footer";
 
-const SearchPage = (params) => {
-  const { text, handleSearchText } = params;
+const SearchPage = () => {
+  const { text, handleSearchText } = useOutletContext();
   const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
@@ -13,18 +11,17 @@ const SearchPage = (params) => {
     if (searchTextFromURL) {
       handleSearchText(searchTextFromURL);
     }
-  }, []);
+  });
 
   useEffect(() => {
     setSearchParams((prev) => {
       prev.set("text", text);
       return prev;
     });
-  }, [text]);
+  }, [text, setSearchParams]);
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar text={text} handleSearchText={handleSearchText} />
       <main>
         <p>
           Search results for:
@@ -32,7 +29,6 @@ const SearchPage = (params) => {
         </p>
         <SearchResults searchQuery={text} />
       </main>
-      <Footer />
     </div>
   );
 };

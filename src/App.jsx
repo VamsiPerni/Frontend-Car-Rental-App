@@ -8,19 +8,14 @@ import { HomePage } from "./pages/HomePage";
 import { NotFoundPage } from "./pages/NotFoundPage";
 import { ProfilePage } from "./pages/ProfilePage";
 import { SearchPage } from "./pages/SearchPage";
-import { useState } from "react";
 import { ComparePage } from "./pages/ComparePage";
 import { ViewPage } from "./pages/ViewPage";
+import { PublicLayout } from "./pages/PublicLayout";
+import { ProtectedLayout } from "./pages/ProtectedLayout";
 
 const App = () => {
   const { appLoading, user } = useAppContext();
   const { isAuthenticated } = user;
-
-  const [text, setText] = useState("");
-
-  const handleSearchText = (newVal) => {
-    setText(newVal);
-  };
 
   console.log("🟡 : App : isAuthenticated:", isAuthenticated);
   console.log("🟡 : App : isAuthenticated: final", !isAuthenticated);
@@ -38,42 +33,26 @@ const App = () => {
     );
   }
 
-  if (!isAuthenticated) {
-    return (
-      <BrowserRouter>
-        <Routes>
-          <Route path="/signup" element={<SignupPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="*" element={<LoginPage />} />
-        </Routes>
-      </BrowserRouter>
-    );
-  }
-
   return (
     <BrowserRouter>
       <Routes>
-        <Route
-          path="/"
-          element={
-            <HomePage
-              text={text}
-              setText={setText}
-              handleSearchText={handleSearchText}
-            />
-          }
-        />
-        <Route path="/signup" element={<HomePage />} />
-        <Route path="/login" element={<HomePage />} />
-        <Route path="/profile" element={<ProfilePage />} />
-        <Route
-          path="/search"
-          element={
-            <SearchPage text={text} handleSearchText={handleSearchText} />
-          }
-        />
-        <Route path="/compare" element={<ComparePage />} />
-        <Route path="/:id/view" element={<ViewPage />} />
+        {/*Auth pages without Navbar  */}
+        <Route path="/signup" element={<SignupPage />} />
+        <Route path="/login" element={<LoginPage />} />
+
+        {/* Public Pages */}
+        <Route element={<PublicLayout />}>
+          <Route path="/" element={<HomePage />}></Route>
+          <Route path="/search" element={<SearchPage />}></Route>
+          <Route path="/:id/view" element={<ViewPage />} />
+        </Route>
+
+        {/* Protected Pages */}
+        <Route element={<ProtectedLayout />}>
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/compare" element={<ComparePage />} />
+        </Route>
+
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
