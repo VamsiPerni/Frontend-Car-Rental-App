@@ -263,8 +263,6 @@ const ViewPage = () => {
           </div>
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 };
